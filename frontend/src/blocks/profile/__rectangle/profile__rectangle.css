@@ -1,0 +1,25 @@
+.profile__rectangle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0 0 18px;
+    width: 24px;
+    height: 24px;
+    border: 1px solid white;
+    cursor: pointer;
+    background-color: black;
+    background: url(../../../images/edit.svg) no-repeat center;
+}
+
+.profile__rectangle:hover {
+    opacity: 0.6;
+}
+
+@media screen and (max-width: 660px) {
+    .profile__rectangle {
+        margin: 34px 0 0 10px;
+        width: 18px;
+        height: 18px;
+        background: url(../../../images/editSmall.svg) no-repeat center;
+    }
+}

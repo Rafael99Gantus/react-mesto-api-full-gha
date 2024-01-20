@@ -1,0 +1,4 @@
+.profile__block {
+    display: flex;
+    justify-content: space-between;
+}

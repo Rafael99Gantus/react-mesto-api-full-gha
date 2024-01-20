@@ -1,0 +1,14 @@
+.elements__image {
+    display: block;
+    position: relative;
+    width: 282px;
+    height: 282px;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+    border:0;
+    z-index: 0;
+}
+
+.elements__image:hover {
+    cursor: zoom-in;
+}

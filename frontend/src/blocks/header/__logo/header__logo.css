@@ -1,0 +1,15 @@
+.header__logo {
+    width: 142px;
+    height: 33px;
+    background: url(../../../images/Logo.svg) no-repeat center;
+    object-fit: cover;
+}
+
+@media screen and (max-width: 660px) {
+    .header__logo {
+        width: 103px;
+        height: 24px;
+        background: url(../../../images/Logo320px.svg) no-repeat center;
+        margin-left: 27px;
+    }
+}

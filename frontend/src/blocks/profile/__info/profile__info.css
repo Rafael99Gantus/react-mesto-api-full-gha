@@ -1,0 +1,10 @@
+.profile__info {
+    align-self: center;
+    justify-self: flex-end;
+}
+
+@media screen and (max-width: 660px) {
+    .profile__info {
+        margin-bottom: 36px;
+    }
+}

@@ -1,0 +1,6 @@
+.elements__box{
+    width: 282px;
+    height: 282px;
+    border: 0;
+    z-index: -1;
+}
