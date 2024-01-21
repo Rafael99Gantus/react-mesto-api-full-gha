@@ -59,7 +59,13 @@ module.exports.login = async (req, res, next) => {
     if (!matched) {
       throw new UnauthorizedError("Почта или пароль неверные");
     }
-    const token = jwt.sign({ _id: user._id }, "some-secret-key", { expiresIn: "7d" });
+    const token = generateToken({ _id: foundUser._id });
+    res.cookie('jwt', token, {
+      maxAge: 3600000 * 24 * 7,
+      httpOnly: true,
+      sameSite: true,
+      secure: false,
+    });
     res.status(http2.constants.HTTP_STATUS_OK).send({ token, message: "Пользователь авторизован" });
   } catch (err) {
     next(err);
