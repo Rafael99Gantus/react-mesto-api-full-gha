@@ -59,7 +59,7 @@ module.exports.login = async (req, res, next) => {
     if (!matched) {
       throw new UnauthorizedError("Почта или пароль неверные");
     }
-    const token = generateToken({ _id: foundUser._id });
+    const token = jwt.sign({ _id: foundUser._id });
     res.cookie('jwt', token, {
       maxAge: 3600000 * 24 * 7,
       httpOnly: true,

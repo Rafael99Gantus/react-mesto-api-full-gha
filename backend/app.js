@@ -8,6 +8,7 @@ const { postUser, login } = require("./controllers/userController");
 const errorHandler = require("./middlewares/error");
 const { signUpValidation, signInValidation } = require("./middlewares/celebrate");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
+const auth = require("./middlewares/auth");
 
 const allowedCors = [
   "https://praktikum.tk",
@@ -16,6 +17,8 @@ const allowedCors = [
 ];
 
 const ERROR_404 = "Страница не найдена, некорректный запрос";
+
+const { PORT = 3000 } = process.env;
 
 const app = express();
 app.use(express.json());
@@ -71,8 +74,8 @@ app.get("/crash-test", () => {
 app.post("/signin", signInValidation, login);
 app.post("/signup", signUpValidation, postUser);
 
-app.use("/users", routerUsers);
-app.use("/cards", routerCards);
+app.use("/users", auth, routerUsers);
+app.use("/cards", auth, routerCards);
 app.use("*", (req, res, next) => {
   next(new NotFoundError(`${ERROR_404}`));
 });
@@ -83,4 +86,6 @@ app.use(errors()); // обработчик ошибок celebrate
 
 app.use(errorHandler);
 
-module.exports = app;
+app.listen(PORT, () => {
+  console.log(`Ссылка на сервер: ${PORT}`);
+});
