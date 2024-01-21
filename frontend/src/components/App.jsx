@@ -53,6 +53,7 @@ function App() {
 
   useEffect(() => {
     const JWT = localStorage.getItem("jwt");
+    console.log(JWT)
     if (JWT) {
       Auth.checkToken(JWT)
         .then((res) => {

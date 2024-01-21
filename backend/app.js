@@ -3,7 +3,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const { errors } = require("celebrate");
 const NotFoundError = require("./utils/NotFoundError");
-
+// eslint-disable-next-line import/no-extraneous-dependencies
+require("dotenv").config();
 const { routerUsers, routerCards } = require("./routes/index");
 const { postUser, login } = require("./controllers/userController");
 const errorHandler = require("./middlewares/error");

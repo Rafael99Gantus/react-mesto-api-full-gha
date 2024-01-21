@@ -1,3 +1,5 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
 const { JWT_SECRET_PRODUCTION, NODE_ENV } = process.env;
