@@ -54,19 +54,28 @@ module.exports.login = async (req, res, next) => {
   try {
     console.log("login");
     const { email, password } = req.body;
-    const user = await User.findOne({ email }).select("+password").orFail(() => new UnauthorizedError(`${ERROR_404}`));
+    // const user = await User.findOne({ email }).select("+password");
+    const user = await User.findUserByCredentials({ email, password });
+    if (!user) {
+      console.log("User not found");
+      throw new UnauthorizedError("Пользователь не найден");
+    }
     const matched = await bcrypt.compare(password, user.password);
     if (!matched) {
-      throw new UnauthorizedError("Почта или пароль неверные");
+      console.log("matched not found");
+      throw new UnauthorizedError("Неправильный пароль");
     }
-    const token = jwt.sign({ _id: foundUser._id });
-    res.cookie('jwt', token, {
-      maxAge: 3600000 * 24 * 7,
-      httpOnly: true,
-      sameSite: true,
-      secure: false,
-    });
-    res.status(http2.constants.HTTP_STATUS_OK).send({ token, message: "Пользователь авторизован" });
+    const token = jwt.sign({ _id: user._id });
+    console.log("token");
+    res
+      // .cookie('jwt', token, {
+      //   maxAge: 3600000 * 24 * 7,
+      //   httpOnly: true,
+      //   sameSite: true,
+      //   secure: false,
+      // })
+      .status(http2.constants.HTTP_STATUS_OK)
+      .send({ token, message: "Пользователь авторизован" });
   } catch (err) {
     next(err);
   }

@@ -3,14 +3,14 @@ const { postCardValidation, cardsIdValidation } = require("../middlewares/celebr
 const {
   getCards, getCardsId, postCard, deleteCard,
 } = require("../controllers/cardController");
-
+const auth = require("../middlewares/auth");
 const { setLike, deleteLike } = require("../controllers/otherControllers");
 
 router.get("/", getCards);
-router.get("/:cardId", getCardsId);
-router.post("/", postCardValidation, postCard);
-router.put("/:cardId/likes", cardsIdValidation, setLike);
-router.delete("/:cardId/likes", cardsIdValidation, deleteLike);
-router.delete("/:cardId", cardsIdValidation, deleteCard);
+router.get("/:cardId", auth, getCardsId);
+router.post("/", auth, postCardValidation, postCard);
+router.put("/:cardId/likes", auth, cardsIdValidation, setLike);
+router.delete("/:cardId/likes", auth, cardsIdValidation, deleteLike);
+router.delete("/:cardId", auth, cardsIdValidation, deleteCard);
 
 module.exports = router;

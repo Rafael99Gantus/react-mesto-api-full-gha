@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import * as Auth from '../utils/Auth.jsx';
 
 export default function Register(props) {
+    // eslint-disable-next-line no-unused-vars
     const [isRegisterSuccess, setIsRegisterSuccess] = useState(true)
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

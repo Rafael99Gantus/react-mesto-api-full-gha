@@ -22,7 +22,7 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsEditCardPopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-  const [isAnswerPopupOpen, setIsAnswerPopupOpen] = useState(false);
+  // const [isAnswerPopupOpen, setIsAnswerPopupOpen] = useState(false);
   const [isInfoTooltipPopup, setIsInfoTooltipPopup] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [currentUser, setCurrentUser] = useState('');
@@ -64,7 +64,7 @@ function App() {
         })
         .catch((err) => console.log(err));
     }
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     if (loggedIn) navigate("/");
@@ -108,9 +108,9 @@ function App() {
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
   }
-  function handleAnswerClick() {
-    setIsAnswerPopupOpen(true);
-  }
+  // function handleAnswerClick() {
+  //   setIsAnswerPopupOpen(true);
+  // }
   function handleCardClick(card) {
     setSelectedCard(card);
   }
@@ -218,7 +218,8 @@ function App() {
             title='Вы уверены?'
             buttonText='Да'
             closeFunc={closeAllPopup}
-            openFunc={isAnswerPopupOpen} />
+            // openFunc={isAnswerPopupOpen} 
+            />
 
           <ImagePopup
             card={selectedCard}
