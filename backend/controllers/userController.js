@@ -68,12 +68,12 @@ module.exports.login = async (req, res, next) => {
     const token = jwt.sign({ _id: user._id });
     console.log("token");
     res
-      // .cookie('jwt', token, {
-      //   maxAge: 3600000 * 24 * 7,
-      //   httpOnly: true,
-      //   sameSite: true,
-      //   secure: false,
-      // })
+      .cookie("jwt", token, {
+        maxAge: 3600000 * 24 * 7,
+        httpOnly: true,
+        sameSite: true,
+        secure: false,
+      })
       .status(http2.constants.HTTP_STATUS_OK)
       .send({ token, password, message: "Пользователь авторизован" });
   } catch (err) {
