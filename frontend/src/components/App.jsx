@@ -157,6 +157,37 @@ function App() {
     setLoggedIn(true);
   }
 
+  // const handleRegister = (email, password) => {
+  //   Auth
+  //     .register(email, password)
+  //     .then(() => {
+  //       setLoggedIn(true);
+  //       setIsInfoTooltipPopup(true);
+  //       navigate("/", { replace: true });
+  //     })
+  //     .catch((err) => {
+  //       setLoggedIn(false);
+  //       setIsInfoTooltipPopup(true);
+  //       console.log(`Ошибка при регистрации: ${err}`);
+  //     });
+  // };
+
+  // const handleLogin = (email, password) => {
+  //   Auth
+  //     .authorize(email, password)
+  //     .then((res) => {
+  //       if (res.statusCode === 401) throw new Error("Ошибка авторизации");
+  //       if (res) {
+  //         localStorage.setItem("jwt", res.token);
+  //         setLoggedIn(true);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(`Ошибка авторизации: ${err}`);
+  //       setLoggedIn(false);
+  //     });
+  // };
+
   function handleIsInfoTooltipClick(){
     setIsInfoTooltipPopup(true)
   }

@@ -75,7 +75,7 @@ module.exports.login = async (req, res, next) => {
       //   secure: false,
       // })
       .status(http2.constants.HTTP_STATUS_OK)
-      .send({ token, message: "Пользователь авторизован" });
+      .send({ token, password, message: "Пользователь авторизован" });
   } catch (err) {
     next(err);
   }
