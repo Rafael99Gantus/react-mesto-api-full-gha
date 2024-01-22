@@ -57,7 +57,7 @@ module.exports.login = async (req, res, next) => {
     console.log("login");
     const { email, password } = req.body;
     // const user = await User.findOne({ email }).select("+password");
-    const user = await User.findUserByCredentials({ email, password });
+    const user = await User.findOne({ email, password });
     if (!user) {
       console.log("User not found");
       throw new UnauthorizedError("Пользователь не найден");
