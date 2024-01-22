@@ -10,6 +10,8 @@ const User = require("../models/user");
 const NotFoundError = require("../utils/NotFoundError");
 const UnauthorizedError = require("../utils/UnauthorizedError");
 
+const { JWT_SECRET_PRODUCTION, NODE_ENV } = process.env;
+
 const ERROR_404 = "Пользователь не найден";
 
 module.exports.getUsers = async (req, res, next) => {
@@ -65,15 +67,15 @@ module.exports.login = async (req, res, next) => {
       console.log("matched not found");
       throw new UnauthorizedError("Неправильный пароль");
     }
-    const token = jwt.sign({ _id: user._id });
+    const token = jwt.sign({ _id: user._id }, NODE_ENV === "production" ? JWT_SECRET_PRODUCTION : "Придумать ключ");
     console.log("token");
     res
-      .cookie("jwt", token, {
-        maxAge: 3600000 * 24 * 7,
-        httpOnly: true,
-        sameSite: true,
-        secure: false,
-      })
+      // .cookie("jwt", token, {
+      //   maxAge: 3600000 * 24 * 7,
+      //   httpOnly: true,
+      //   sameSite: true,
+      //   secure: false,
+      // })
       .status(http2.constants.HTTP_STATUS_OK)
       .send({ token, password, message: "Пользователь авторизован" });
   } catch (err) {

@@ -1,6 +1,6 @@
 import checkResponse from "./checkResponse";
 
-export const BASE_URL = 'https://auth.nomoreparties.co';
+export const BASE_URL = 'https://api.mesto.rafael.nomoredomainsmonster.ru';
 
 function request(url, options) {
   return fetch(url, options).then(checkResponse)
