@@ -37,20 +37,19 @@ module.exports.getUsersId = async (req, res, next) => {
 module.exports.postUser = async (req, res, next) => {
   try {
     console.log("postUser");
-    const hashPassword = await bcrypt.hash(req.body.password, 10);
     const newUser = await User.create({
       name: req.body.name,
       about: req.body.about,
       avatar: req.body.avatar,
       email: req.body.email,
-      password: hashPassword,
+      // password: hashPassword,
     });
-    res.status(http2.constants.HTTP_STATUS_OK).json(newUser);
+    res.status(http2.constants.HTTP_STATUS_CREATED).json(newUser);
   } catch (err) {
     next(err);
   }
 };
-
+// const hashPassword = await bcrypt.hash(req.body.password, 10);
 // eslint-disable-next-line consistent-return
 module.exports.login = async (req, res, next) => {
   try {
@@ -70,12 +69,12 @@ module.exports.login = async (req, res, next) => {
     const token = jwt.sign({ _id: user._id }, NODE_ENV === "production" ? JWT_SECRET_PRODUCTION : "Придумать ключ");
     console.log("token");
     res
-      // .cookie("jwt", token, {
-      //   maxAge: 3600000 * 24 * 7,
-      //   httpOnly: true,
-      //   sameSite: true,
-      //   secure: false,
-      // })
+      .cookie("jwt", token, {
+        maxAge: 3600000 * 24 * 7,
+        httpOnly: true,
+        sameSite: true,
+        secure: false,
+      })
       .status(http2.constants.HTTP_STATUS_OK)
       .send({ token, password, message: "Пользователь авторизован" });
   } catch (err) {
