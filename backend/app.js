@@ -10,14 +10,38 @@ const { postUser, login } = require("./controllers/userController");
 const errorHandler = require("./middlewares/error");
 const { signUpValidation, signInValidation } = require("./middlewares/celebrate");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
-const cors = require("./middlewares/cors");
+const allowedCors = require("./middlewares/cors");
 
 const ERROR_404 = "Страница не найдена, некорректный запрос";
 
 const { PORT = 3000 } = process.env;
 
 const app = express();
+// app.use(cors);
+app.use((req, res, next) => {
+  const { origin } = req.headers;
+  const { method } = req;
+  const DEFAULT_ALLOWED_METHODS = "GET,HEAD,PUT,PATCH,POST,DELETE";
+  const requestHeaders = req.headers["access-control-request-headers"];
+  if (allowedCors.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+  }
+  if (method === "OPTIONS") {
+    res.header("Access-Control-Allow-Methods", DEFAULT_ALLOWED_METHODS);
+    res.header("Access-Control-Allow-Headers", requestHeaders);
+    return res.end();
+  }
+
+  return next();
+});
 app.use(express.json());
+app.use(requestLogger);
+
+app.get("/crash-test", () => {
+  setTimeout(() => {
+    throw new Error("Сервер сейчас упадёт");
+  }, 0);
+});
 
 mongoose.connect("mongodb://127.0.0.1:27017/mestodb")
   .then(() => {
@@ -26,16 +50,6 @@ mongoose.connect("mongodb://127.0.0.1:27017/mestodb")
   .catch((err) => {
     console.error("Ошибка подключения:", err.message);
   });
-
-app.use(requestLogger);
-
-app.use(cors);
-
-app.get("/crash-test", () => {
-  setTimeout(() => {
-    throw new Error("Сервер сейчас упадёт");
-  }, 0);
-});
 
 app.post("/signin", signInValidation, login);
 app.post("/signup", signUpValidation, postUser);
