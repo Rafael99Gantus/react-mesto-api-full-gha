@@ -26,7 +26,7 @@ export default function Login(props) {
           localStorage.setItem(TOKEN_KEY, data.token);
           setEmail('');
           setPassword('');
-          props.onLogin();
+          props.onLogin(email, password);
           navigate('/', { replace: true });
         }
       })

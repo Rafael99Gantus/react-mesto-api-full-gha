@@ -29,8 +29,8 @@ function App() {
   const [cards, setCards] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false)
   const [userEmail, setUserEmail] = useState("");
-  
 
+  const TOKEN_KEY = 'token';
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -60,7 +60,7 @@ function App() {
           if (res) {
             setLoggedIn(true);
             setUserEmail(res.data.email);
-            navigate("/", {replace: true})
+            navigate("/", { replace: true })
           }
         })
         .catch((err) => console.log(err));
@@ -150,12 +150,24 @@ function App() {
   }
 
   function handleRegister() {
-    
+
   }
 
-  const handleLogin = () => {
-    setLoggedIn(true);
-  }
+  const handleLogin = async (email, password) => {
+    try {
+      const data = await Auth.authorize(email, password);
+      if (data.token) {
+        localStorage.setItem(TOKEN_KEY, data.token);
+        setLoggedIn(true);
+        setUserEmail(email);
+        localStorage.setItem("loggedIn", true);
+        navigate("/");
+      }
+    } catch (err) {
+      console.log(err);
+      console.log("UPS");
+    }
+  };
 
   // const handleRegister = (email, password) => {
   //   Auth
@@ -188,7 +200,7 @@ function App() {
   //     });
   // };
 
-  function handleIsInfoTooltipClick(){
+  function handleIsInfoTooltipClick() {
     setIsInfoTooltipPopup(true)
   }
 
@@ -198,9 +210,9 @@ function App() {
         <div className="root">
 
           <div className="page">
-          <Header loggedIn={loggedIn} userEmail={userEmail}/>
+            <Header loggedIn={loggedIn} userEmail={userEmail} />
             <Routes>
-              
+
               <Route path="/" element={
                 <ProtectedRoute
                   loggedIn={loggedIn}
@@ -217,14 +229,14 @@ function App() {
                 />
               }
               />
-              <Route path="/sign-up" element={<Register onRegister={handleRegister} onIsInfoTooltip={handleIsInfoTooltipClick} closeFunc={closeAllPopup}/>} />
+              <Route path="/sign-up" element={<Register onRegister={handleRegister} onIsInfoTooltip={handleIsInfoTooltipClick} closeFunc={closeAllPopup} />} />
               <Route path="/sign-in" element={<Login onLogin={handleLogin} />} />
             </Routes>
-            
+
             <Footer />
           </div>
 
-          <InfoTooltip 
+          <InfoTooltip
             isOpen={isInfoTooltipPopup}
             closeFunc={closeAllPopup}
             loggedIn={loggedIn}
@@ -250,8 +262,8 @@ function App() {
             title='Вы уверены?'
             buttonText='Да'
             closeFunc={closeAllPopup}
-            // openFunc={isAnswerPopupOpen} 
-            />
+          // openFunc={isAnswerPopupOpen} 
+          />
 
           <ImagePopup
             card={selectedCard}

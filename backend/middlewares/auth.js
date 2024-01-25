@@ -8,6 +8,11 @@ const { JWT_SECRET_PRODUCTION, NODE_ENV } = process.env;
 module.exports = (req, res, next) => {
   console.log("start auto");
   const { authorization } = req.headers;
+
+  if (!authorization.startsWith("Bearer")) {
+    next(new UnauthorizedError("Требуется авторизация"));
+  }
+
   console.log(authorization);
   const token = authorization.replace("Bearer ", "");
   // const token = req.cookies.jwt;

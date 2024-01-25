@@ -6,7 +6,7 @@ const {
 const auth = require("../middlewares/auth");
 const { setLike, deleteLike } = require("../controllers/otherControllers");
 
-router.get("/", auth, getCards);
+router.get("/", getCards);
 router.get("/:cardId", auth, getCardsId);
 router.post("/", auth, postCardValidation, postCard);
 router.put("/:cardId/likes", auth, cardsIdValidation, setLike);
