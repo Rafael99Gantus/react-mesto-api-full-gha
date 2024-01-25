@@ -11,7 +11,7 @@ const NotFoundError = require("../utils/NotFoundError");
 const UnauthorizedError = require("../utils/UnauthorizedError");
 const BadRequestError = require("../utils/BadRequest");
 
-const { JWT_SECRET_PRODUCTION, NODE_ENV } = process.env;
+const { JWT_SECRET, NODE_ENV } = process.env;
 
 const ERROR_404 = "Пользователь не найден";
 
@@ -122,7 +122,7 @@ module.exports.login = async (req, res, next) => {
       return next(new UnauthorizedError("Неверный пароль"));
     }
     console.log(user._id);
-    const token = jwt.sign({ _id: user._id }, NODE_ENV === "production" ? JWT_SECRET_PRODUCTION : "Придумать ключ");
+    const token = jwt.sign({ _id: user._id }, NODE_ENV === "production" ? JWT_SECRET : "Придумать ключ");
     if (!token) {
       console.log("error token");
     }
