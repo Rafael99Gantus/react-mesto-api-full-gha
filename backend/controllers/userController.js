@@ -9,6 +9,7 @@ const User = require("../models/user");
 
 const NotFoundError = require("../utils/NotFoundError");
 const UnauthorizedError = require("../utils/UnauthorizedError");
+const BadRequestError = require("../utils/BadRequest");
 
 const { JWT_SECRET_PRODUCTION, NODE_ENV } = process.env;
 
@@ -34,54 +35,109 @@ module.exports.getUsersId = async (req, res, next) => {
   }
 };
 
+// module.exports.postUser = async (req, res, next) => {
+//   try {
+//     console.log("postUser");
+//     const newUser = await User.create({
+//       name: req.body.name,
+//       about: req.body.about,
+//       avatar: req.body.avatar,
+//       email: req.body.email,
+//       // password: hashPassword,
+//     });
+//     res.status(http2.constants.HTTP_STATUS_CREATED).json(newUser);
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 module.exports.postUser = async (req, res, next) => {
-  try {
-    console.log("postUser");
-    const newUser = await User.create({
-      name: req.body.name,
-      about: req.body.about,
-      avatar: req.body.avatar,
-      email: req.body.email,
-      // password: hashPassword,
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  return User
+    .create({
+      name, about, avatar, email, password: hashedPassword,
+    })
+  // eslint-disable-next-line no-shadow
+    .then((newUser) => res.status(http2.constants.HTTP_STATUS_CREATED).send({
+      name: newUser.name,
+      about: newUser.about,
+      avatar: newUser.avatar,
+      email: newUser.email,
+    }))
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        return next(new BadRequestError("Не удалось добавить пользователя"));
+      }
+      return next(err);
     });
-    res.status(http2.constants.HTTP_STATUS_CREATED).json(newUser);
-  } catch (err) {
-    next(err);
-  }
 };
 // const hashPassword = await bcrypt.hash(req.body.password, 10);
 // eslint-disable-next-line consistent-return
+// module.exports.login = async (req, res, next) => {
+//   try {
+//     console.log("login");
+//     const { email, password } = req.body;
+//     // const user = await User.findOne({ email }).select("+password");
+//     const user = await User.findOne({ email, password });
+//     if (!user) {
+//       console.log("User not found");
+//       throw new UnauthorizedError("Пользователь не найден");
+//     }
+//     const matched = await bcrypt.compare(password, user.password);
+//     if (!matched) {
+//       console.log("matched not found");
+//       throw new UnauthorizedError("Неправильный пароль");
+//     }
+//     const token = jwt.sign({ _id: user._id }, NODE_ENV === "production" ? JWT_SECRET_PRODUCTION : "Придумать ключ");
+//     console.log("token");
+//     res
+//       .cookie("jwt", token, {
+//         maxAge: 3600000 * 24 * 7,
+//         httpOnly: true,
+//         sameSite: true,
+//         secure: false,
+//       })
+//       .status(http2.constants.HTTP_STATUS_OK)
+//       .send({ token, password, message: "Пользователь авторизован" });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 module.exports.login = async (req, res, next) => {
   try {
-    console.log("login");
     const { email, password } = req.body;
-    // const user = await User.findOne({ email }).select("+password");
-    const user = await User.findOne({ email, password });
+
+    const user = await User.findOne({ email }).select("+password");
     if (!user) {
-      console.log("User not found");
-      throw new UnauthorizedError("Пользователь не найден");
+      return next(new UnauthorizedError("пользователь с таким email не найден"));
     }
     const matched = await bcrypt.compare(password, user.password);
     if (!matched) {
-      console.log("matched not found");
-      throw new UnauthorizedError("Неправильный пароль");
+      return next(new UnauthorizedError("Неверный пароль"));
     }
     const token = jwt.sign({ _id: user._id }, NODE_ENV === "production" ? JWT_SECRET_PRODUCTION : "Придумать ключ");
-    console.log("token");
-    res
-      .cookie("jwt", token, {
-        maxAge: 3600000 * 24 * 7,
-        httpOnly: true,
-        sameSite: true,
-        secure: false,
-      })
-      .status(http2.constants.HTTP_STATUS_OK)
-      .send({ token, password, message: "Пользователь авторизован" });
+    res.cookie("jwt", token, {
+      maxAge: 3600000 * 24 * 7,
+      httpOnly: true,
+      sameSite: true,
+      secure: false,
+    });
+    return res.send({
+      email: user.email,
+      about: user.about,
+      name: user.email,
+      avatar: user.avatar,
+      _id: user._id,
+    });
   } catch (err) {
-    next(err);
+    if (err.name === "ValidationError") {
+      return next(new BadRequestError("Не удалось войти"));
+    }
+    return next(err);
   }
 };
-
 module.exports.getMe = async (req, res, next) => {
   try {
     console.log("getMe");
