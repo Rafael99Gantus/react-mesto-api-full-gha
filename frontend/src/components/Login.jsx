@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import * as Auth from '../utils/Auth.jsx';
+const TOKEN_KEY = 'token';
 
 export default function Login(props) {
   const [email, setEmail] = useState('');
@@ -22,7 +23,7 @@ export default function Login(props) {
       .then((data) => {
         console.log(data)
         if (data.token) {
-          localStorage.setItem('jwt', data.token);
+          localStorage.setItem(TOKEN_KEY, data.token);
           setEmail('');
           setPassword('');
           props.onLogin();

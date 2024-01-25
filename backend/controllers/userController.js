@@ -46,7 +46,7 @@ module.exports.postUser = async (req, res, next) => {
     .create({
       name, about, avatar, email, password: hashedPassword,
     })
-  // eslint-disable-next-line no-shadow
+    // eslint-disable-next-line no-shadow
     .then((newUser) => res.status(http2.constants.HTTP_STATUS_CREATED).send({
       about: newUser.about,
       avatar: newUser.avatar,
@@ -60,6 +60,7 @@ module.exports.postUser = async (req, res, next) => {
     });
 };
 
+// eslint-disable-next-line consistent-return
 module.exports.login = async (req, res, next) => {
   try {
     console.log("login start");
@@ -77,23 +78,16 @@ module.exports.login = async (req, res, next) => {
     }
     console.log(user._id);
     const token = jwt.sign({ _id: user._id }, NODE_ENV === "production" ? JWT_SECRET : "Придумать ключ");
-    if (!token) {
-      console.log("error token");
-    }
+    // const token = jwt.sign({ _id: user._id }, JWT_SECRET);
     console.log(token);
     res.cookie("jwt", token, {
       maxAge: 3600000 * 24 * 7,
       httpOnly: true,
       sameSite: false,
       secure: true,
-    });
-    return res.send({
-      email: user.email,
-      about: user.about,
-      name: user.email,
-      avatar: user.avatar,
-      _id: user._id,
-    });
+    })
+      .send({ data: user.toJSON });
+    // res.status(200).send({ data: token });
   } catch (err) {
     if (err.name === "ValidationError") {
       return next(new BadRequestError("Не удалось войти"));
