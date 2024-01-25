@@ -52,6 +52,7 @@ module.exports.getUsersId = async (req, res, next) => {
 // };
 module.exports.postUser = async (req, res, next) => {
   console.log("register start");
+  console.log(process.env.JWT_SECRET);
   const {
     name, about, avatar, email, password,
   } = req.body;
