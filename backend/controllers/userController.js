@@ -51,6 +51,7 @@ module.exports.getUsersId = async (req, res, next) => {
 //   }
 // };
 module.exports.postUser = async (req, res, next) => {
+  console.log("register start");
   const {
     name, about, avatar, email, password,
   } = req.body;
@@ -61,7 +62,6 @@ module.exports.postUser = async (req, res, next) => {
     })
   // eslint-disable-next-line no-shadow
     .then((newUser) => res.status(http2.constants.HTTP_STATUS_CREATED).send({
-      name: newUser.name,
       about: newUser.about,
       avatar: newUser.avatar,
       email: newUser.email,
@@ -107,17 +107,25 @@ module.exports.postUser = async (req, res, next) => {
 // };
 module.exports.login = async (req, res, next) => {
   try {
+    console.log("login start");
     const { email, password } = req.body;
-
     const user = await User.findOne({ email }).select("+password");
+    console.log("user find");
     if (!user) {
       return next(new UnauthorizedError("пользователь с таким email не найден"));
     }
     const matched = await bcrypt.compare(password, user.password);
+    console.log("matched find");
+    console.log(matched);
     if (!matched) {
       return next(new UnauthorizedError("Неверный пароль"));
     }
+    console.log(user._id);
     const token = jwt.sign({ _id: user._id }, NODE_ENV === "production" ? JWT_SECRET_PRODUCTION : "Придумать ключ");
+    if (!token) {
+      console.log("error token");
+    }
+    console.log(token);
     res.cookie("jwt", token, {
       maxAge: 3600000 * 24 * 7,
       httpOnly: true,

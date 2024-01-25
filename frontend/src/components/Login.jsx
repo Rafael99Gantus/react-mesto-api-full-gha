@@ -29,7 +29,11 @@ export default function Login(props) {
           navigate('/', { replace: true });
         }
       })
-      .catch(err => console.log(err));
+      .catch((err)=>{
+        props.onIsInfoTooltip();
+        setTimeout(props.closeFunc, 2000);
+        console.log(err)
+    })
   }
 
   return (
