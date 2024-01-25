@@ -30,8 +30,6 @@ export default function Login(props) {
         }
       })
       .catch((err)=>{
-        props.onIsInfoTooltip();
-        setTimeout(props.closeFunc, 2000);
         console.log(err)
     })
   }
