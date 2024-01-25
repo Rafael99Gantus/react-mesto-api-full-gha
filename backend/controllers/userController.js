@@ -35,21 +35,6 @@ module.exports.getUsersId = async (req, res, next) => {
   }
 };
 
-// module.exports.postUser = async (req, res, next) => {
-//   try {
-//     console.log("postUser");
-//     const newUser = await User.create({
-//       name: req.body.name,
-//       about: req.body.about,
-//       avatar: req.body.avatar,
-//       email: req.body.email,
-//       // password: hashPassword,
-//     });
-//     res.status(http2.constants.HTTP_STATUS_CREATED).json(newUser);
-//   } catch (err) {
-//     next(err);
-//   }
-// };
 module.exports.postUser = async (req, res, next) => {
   console.log("register start");
   console.log(process.env.JWT_SECRET);
@@ -74,38 +59,7 @@ module.exports.postUser = async (req, res, next) => {
       return next(err);
     });
 };
-// const hashPassword = await bcrypt.hash(req.body.password, 10);
-// eslint-disable-next-line consistent-return
-// module.exports.login = async (req, res, next) => {
-//   try {
-//     console.log("login");
-//     const { email, password } = req.body;
-//     // const user = await User.findOne({ email }).select("+password");
-//     const user = await User.findOne({ email, password });
-//     if (!user) {
-//       console.log("User not found");
-//       throw new UnauthorizedError("Пользователь не найден");
-//     }
-//     const matched = await bcrypt.compare(password, user.password);
-//     if (!matched) {
-//       console.log("matched not found");
-//       throw new UnauthorizedError("Неправильный пароль");
-//     }
-//     const token = jwt.sign({ _id: user._id }, NODE_ENV === "production" ? JWT_SECRET_PRODUCTION : "Придумать ключ");
-//     console.log("token");
-//     res
-//       .cookie("jwt", token, {
-//         maxAge: 3600000 * 24 * 7,
-//         httpOnly: true,
-//         sameSite: true,
-//         secure: false,
-//       })
-//       .status(http2.constants.HTTP_STATUS_OK)
-//       .send({ token, password, message: "Пользователь авторизован" });
-//   } catch (err) {
-//     next(err);
-//   }
-// };
+
 module.exports.login = async (req, res, next) => {
   try {
     console.log("login start");
@@ -149,6 +103,9 @@ module.exports.login = async (req, res, next) => {
 };
 module.exports.getMe = async (req, res, next) => {
   try {
+    if (!req.user || !req.user._id) {
+      throw new Error("Пользователь не авторизован");
+    }
     console.log("getMe");
     const userId = req.user._id;
     const me = await User.find({ userId }).orFail(() => new NotFoundError(`${ERROR_404}`));
@@ -157,6 +114,7 @@ module.exports.getMe = async (req, res, next) => {
       email: me.email,
       about: me.about,
       avatar: me.avatar,
+      _id: me._id,
     });
   } catch (err) {
     next(err);
