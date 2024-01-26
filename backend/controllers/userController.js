@@ -119,7 +119,7 @@ module.exports.login = async (req, res, next) => {
     //   sameSite: false,
     //   secure: true,
     // });
-    return res.send({ token });
+    return res.status(http2.constants.HTTP_STATUS_OK).send({ token });
   } catch (err) {
     if (err.name === "ValidationError") {
       return next(new BadRequestError("Не удалось войти"));

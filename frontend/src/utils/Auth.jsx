@@ -7,6 +7,14 @@ function request(url, options) {
   return fetch(url, options).then(checkResponse)
 }
 
+export const validateResponse = (res) => {
+  return res.ok
+    ? res.json()
+    : Promise.reject(
+        `Упс, сервер ответил ошибкой: ${res.status}, ${res.message}`
+      );
+};
+
 export const register = (email, password) => {
   return request(`${BASE_URL}/signup`, {
     method: 'POST',
@@ -14,7 +22,7 @@ export const register = (email, password) => {
         "Content-Type": "application/json" 
     },
     body: JSON.stringify({email: email, password: password})
-  })
+  }).then(validateResponse)
 }; 
 
 
@@ -26,7 +34,7 @@ export const authorize = (email, password) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({email, password})
-  })
+  }).then(validateResponse)
 }; 
 
 export const checkToken = (token) => {
@@ -37,5 +45,5 @@ export const checkToken = (token) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
       }
-  })
+  }).then(validateResponse)
 };
