@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import * as Auth from '../utils/Auth.jsx';
-const TOKEN_KEY = 'token';
+// import * as Auth from '../utils/Auth.jsx';
+// const TOKEN_KEY = 'token';
 
 export default function Login(props) {
   const [email, setEmail] = useState('');
@@ -19,20 +19,10 @@ export default function Login(props) {
     if (!email || !password) {
       return;
     }
-    Auth.authorize(email, password)
-      .then((data) => {
-        console.log(data)
-        if (data.token) {
-          localStorage.setItem(TOKEN_KEY, data.token);
-          setEmail('');
-          setPassword('');
-          props.onLogin(email, password);
-          navigate('/', { replace: true });
-        }
-      })
-      .catch((err)=>{
-        console.log(err)
-    })
+    props.onLogin(email, password);
+    setEmail('');
+    setPassword('');
+    navigate('/', { replace: true });
   }
 
   return (

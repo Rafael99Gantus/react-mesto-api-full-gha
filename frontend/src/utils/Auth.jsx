@@ -1,6 +1,7 @@
 import checkResponse from "./checkResponse";
 
 export const BASE_URL = 'https://api.mesto.rafael.nomoredomainsmonster.ru';
+// export const BASE_URL = 'https://localhost:3000';
 
 function request(url, options) {
   return fetch(url, options).then(checkResponse)
@@ -24,7 +25,7 @@ export const authorize = (email, password) => {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({email: email, password: password})
+    body: JSON.stringify({email, password})
   })
 }; 
 
@@ -32,6 +33,7 @@ export const checkToken = (token) => {
   return request(`${BASE_URL}/users/me`, {
       method: "GET",
       headers: {
+          'Accept': 'application/json',
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
       }
