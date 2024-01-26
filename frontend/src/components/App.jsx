@@ -53,14 +53,14 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const JWT = localStorage.getItem("jwt");
-    console.log(JWT)
-    if (JWT) {
-      Auth.checkToken(JWT)
+    const token = localStorage.getItem("token");
+    console.log(token)
+    if (token) {
+      Auth.checkToken(token)
         .then((res) => {
           if (res) {
             setLoggedIn(true);
-            setUserEmail(res.data.email);
+            setUserEmail(res.email);
             navigate("/", { replace: true })
           }
         })
