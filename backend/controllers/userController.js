@@ -119,13 +119,7 @@ module.exports.login = async (req, res, next) => {
     //   sameSite: false,
     //   secure: true,
     // });
-    return res.send({
-      email: user.email,
-      about: user.about,
-      name: user.email,
-      avatar: user.avatar,
-      _id: user._id,
-    });
+    return res.send({ token });
   } catch (err) {
     if (err.name === "ValidationError") {
       return next(new BadRequestError("Не удалось войти"));
