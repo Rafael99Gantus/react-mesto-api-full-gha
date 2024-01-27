@@ -94,7 +94,7 @@ const api = new Api({
     url: "https://api.mesto.rafael.nomoredomainsmonster.ru",
     // url: "https://localhost:3000",
     headers: {
-        // authorization: '201e26a5-d782-4c58-9b61-1aee30a7887d',
+        authorization: '201e26a5-d782-4c58-9b61-1aee30a7887d',
         "Content-Type": "application/json"
     }
 })
