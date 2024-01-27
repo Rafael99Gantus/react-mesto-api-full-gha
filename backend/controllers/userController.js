@@ -48,6 +48,7 @@ module.exports.postUser = async (req, res, next) => {
     })
     // eslint-disable-next-line no-shadow
     .then((newUser) => res.status(http2.constants.HTTP_STATUS_CREATED).send({
+      name: newUser.name,
       about: newUser.about,
       avatar: newUser.avatar,
       email: newUser.email,
@@ -60,59 +61,22 @@ module.exports.postUser = async (req, res, next) => {
     });
 };
 
-// eslint-disable-next-line consistent-return
-// module.exports.login = async (req, res, next) => {
-//   try {
-//     console.log("login start");
-//     const { email, password } = req.body;
-//     const user = await User.findUserByCredentials({ email }).select("+password");
-//     if (!user) {
-//       return next(new UnauthorizedError("пользователь с таким email не найден"));
-//     }
-//     const matched = await bcrypt.compare(password, user.password);
-//     console.log(matched);
-//     if (!matched) {
-//       return next(new UnauthorizedError("Неверный пароль"));
-//     }
-//     const token = jwt.sign({ _id: user._id }, NODE_ENV === "production" ? JWT_SECRET : "Придумать ключ");
-//     // const token = jwt.sign({ _id: user._id }, JWT_SECRET);
-//     // res.cookie("jwt", token, {
-//     //   maxAge: 3600000 * 24 * 7,
-//     //   httpOnly: true,
-//     //   sameSite: false,
-//     //   secure: true,
-//     // })
-//       .send(user.toJSON);
-//     // res.status(200).send({ data: token });
-//   } catch (err) {
-//     if (err.name === "ValidationError") {
-//       return next(new BadRequestError("Не удалось войти"));
-//     }
-//     return next(err);
-//   }
-// };
-
 module.exports.login = async (req, res, next) => {
   try {
     console.log("login start");
     const { email, password } = req.body;
     const user = await User.findOne({ email }).select("+password");
-    console.log("user find");
     if (!user) {
       return next(new UnauthorizedError("пользователь с таким email не найден"));
     }
     const matched = await bcrypt.compare(password, user.password);
-    console.log("matched find");
-    console.log(matched);
     if (!matched) {
       return next(new UnauthorizedError("Неверный пароль"));
     }
-    console.log(user._id);
     const token = jwt.sign({ _id: user._id }, NODE_ENV === "production" ? JWT_SECRET : "Придумать ключ");
     if (!token) {
       console.log("error token");
     }
-    console.log(token);
     // res.cookie("jwt", token, {
     //   maxAge: 3600000 * 24 * 7,
     //   httpOnly: true,
@@ -127,6 +91,40 @@ module.exports.login = async (req, res, next) => {
     return next(err);
   }
 };
+
+// module.exports.login = async (req, res, next) => {
+//   try {
+//     const { email, password } = req.body;
+
+//     const foundUser = await User.findOne({ email }).select("+password");
+//     if (!foundUser) {
+//       return next(new UnauthorizedError("пользователь с таким email не найден"));
+//     }
+//     const compareResult = await bcrypt.compare(password, foundUser.password);
+//     if (!compareResult) {
+//       return next(new UnauthorizedError("Неверный пароль"));
+//     }
+//     const token = jwt.sign({ _id: foundUser._id }, NODE_ENV === "production" ? JWT_SECRET : "Придумать ключ");
+//     res.cookie("jwt", token, {
+//       maxAge: 3600000 * 24 * 7,
+//       httpOnly: true,
+//       sameSite: true,
+//       secure: false,
+//     });
+//     return res.send({
+//       email: foundUser.email,
+//       about: foundUser.about,
+//       name: foundUser.email,
+//       avatar: foundUser.avatar,
+//       _id: foundUser._id,
+//     });
+//   } catch (err) {
+//     if (err.name === "ValidationError") {
+//       return next(new BadRequestError("Не удалось войти"));
+//     }
+//     return next(err);
+//   }
+// };
 
 module.exports.getMe = async (req, res, next) => {
   try {

@@ -18,7 +18,8 @@ class Api {
     getAllCards() {
         return this._sendRequest(`${this._url}/cards`, {
             method: 'GET',
-            headers: this._headers
+            // headers: this._headers
+            // credentials: 'include',
         })
     }
 
@@ -26,6 +27,7 @@ class Api {
         return this._sendRequest(`${this._url}/cards`, {
             method: 'POST',
             headers: this._headers,
+            // credentials: 'include',
             body: JSON.stringify(data)
         })
     }
@@ -33,6 +35,7 @@ class Api {
     deleteCard(id) {
         return this._sendRequest(`${this._url}/cards/${id}`, {
             method: 'DELETE',
+            // credentials: 'include',
             headers: this._headers
         })
     }
@@ -40,6 +43,7 @@ class Api {
     getInfo() {
         return this._sendRequest(`${this._url}/users/me`, {
             method: 'GET',
+            // credentials: 'include',
             headers: this._headers
         })
     }
@@ -48,6 +52,7 @@ class Api {
         return this._sendRequest(`${this._url}/users/me`, {
             method: 'PATCH',
             headers: this._headers,
+            // credentials: 'include',
             body: JSON.stringify({
                 name: info.name,
                 about: info.about
@@ -59,6 +64,7 @@ class Api {
         return this._sendRequest(`${this._url}/users/me/avatar`, {
             method: 'PATCH',
             headers: this._headers,
+            // credentials: 'include',
             body: JSON.stringify({
                 avatar: info.avatar
             })
@@ -71,6 +77,7 @@ class Api {
 
         return fetch(url, {
             method: method,
+            // credentials: 'include',
             headers: this._headers,
         })
             .then((response) => {

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 // eslint-disable-next-line import/no-extraneous-dependencies
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
@@ -8,7 +9,6 @@ const { JWT_SECRET_PRODUCTION, NODE_ENV } = process.env;
 module.exports = (req, res, next) => {
   console.log("start auto");
   const { authorization } = req.headers;
-
   if (!authorization.startsWith("Bearer")) {
     next(new UnauthorizedError("Требуется авторизация"));
   }
@@ -27,3 +27,20 @@ module.exports = (req, res, next) => {
   req.user = payload;
   next();
 };
+
+// module.exports = (req, res, next) => {
+//   let payload;
+//   try {
+//     const { cookies } = req;
+//     if ((cookies && cookies.jwt)) {
+//       const token = cookies.jwt;
+//       payload = jwt.verify(token, NODE_ENV === "production" ? JWT_SECRET_PRODUCTION : "dev-secret");
+//       req.user = payload;
+//       next();
+//     } else {
+//       next(new UnauthorizedError("Неверные авторизационные данные"));
+//     }
+//   } catch (error) {
+//     next(new UnauthorizedError("Неверные авторизационные данные19"));
+//   }
+// };

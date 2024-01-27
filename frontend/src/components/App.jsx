@@ -52,21 +52,21 @@ function App() {
       });
   }, []);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    console.log(token)
-    if (token) {
-      Auth.checkToken(token)
-        .then((res) => {
-          if (res) {
-            setLoggedIn(true);
-            setUserEmail(res.email);
-            navigate("/", { replace: true })
-          }
-        })
-        .catch((err) => console.log(err));
-    }
-  }, [navigate]);
+  // useEffect(() => {
+  //   const JWT = localStorage.getItem("jwt");
+  //   console.log(JWT)
+  //   if (JWT) {
+  //     Auth.checkToken(JWT)
+  //       .then((res) => {
+  //         if (res) {
+  //           setLoggedIn(true);
+  //           setUserEmail(res.email);
+  //           navigate("/", { replace: true })
+  //         }
+  //       })
+  //       .catch((err) => console.log(err));
+  //   }
+  // }, [navigate]);
 
   useEffect(() => {
     if (loggedIn) navigate("/");
