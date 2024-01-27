@@ -18,7 +18,7 @@ class Api {
     getAllCards() {
         return this._sendRequest(`${this._url}/cards`, {
             method: 'GET',
-            // headers: this._headers
+            headers: this._headers
             // credentials: 'include',
         })
     }

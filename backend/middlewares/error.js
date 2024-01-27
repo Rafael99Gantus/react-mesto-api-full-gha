@@ -37,7 +37,7 @@ const errorHandler = (err, req, res, next) => {
   }
   if (err.name === "UnauthorizedError") {
     return res
-      .status(http2.constants.HTTP_STATUS_DENIED)
+      .status(http2.constants.HTTP_STATUS_UNAUTHORIZED)
       .json({ message: ERROR_401 });
   }
   if (err.name === "NotFoundError") {
