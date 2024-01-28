@@ -51,7 +51,7 @@ function App() {
         console.log(err);
       });
   }, []);
-
+// ***
   useEffect(() => {
     const JWT = localStorage.getItem("jwt");
     console.log(JWT)
