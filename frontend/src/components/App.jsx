@@ -36,7 +36,7 @@ function App() {
 
   React.useEffect(() => {
     if (loggedIn) {
-      Auth
+      api
         .getInfo()
         .then((res) => {
           setCurrentUser(res);
@@ -44,7 +44,7 @@ function App() {
         .catch((err) => {
           console.log(`Ошибка входа пользователя: ${err}`);
         });
-      Auth
+      api
         .getCards()
         .then((res) => {
           setCards(res);
