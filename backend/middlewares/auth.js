@@ -16,15 +16,16 @@ module.exports = (req, res, next) => {
   console.log(authorization);
   const token = authorization.replace("Bearer ", "");
   // const token = req.cookies.jwt;
+  console.log(token);
   let payload;
   try {
-    console.log(payload);
     payload = jwt.verify(token, NODE_ENV === "production" ? JWT_SECRET : "Придумать ключ");
     console.log(payload);
   } catch (err) {
     next(new UnauthorizedError("Требуется авторизация"));
   }
   req.user = payload;
+  console.log(req.user);
   next();
 };
 

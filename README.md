@@ -11,7 +11,7 @@
 
 ## Ссылки на проект
 
-IP-адрес 178.154.207.70
+IP-адрес 158.160.109.12
 
 Frontend https://mesto.rafael.nomoredomainsmonster.ru
 

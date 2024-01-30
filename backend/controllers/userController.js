@@ -61,6 +61,7 @@ module.exports.postUser = async (req, res, next) => {
     });
 };
 
+// eslint-disable-next-line consistent-return
 module.exports.login = async (req, res, next) => {
   try {
     console.log("login start");
@@ -69,21 +70,17 @@ module.exports.login = async (req, res, next) => {
     if (!user) {
       return next(new UnauthorizedError("пользователь с таким email не найден"));
     }
+    console.log(user);
     const matched = await bcrypt.compare(password, user.password);
     if (!matched) {
       return next(new UnauthorizedError("Неверный пароль"));
     }
+    console.log(matched);
     const token = jwt.sign({ _id: user._id }, NODE_ENV === "production" ? JWT_SECRET : "Придумать ключ");
     if (!token) {
       console.log("error token");
     }
-    // res.cookie("jwt", token, {
-    //   maxAge: 3600000 * 24 * 7,
-    //   httpOnly: true,
-    //   sameSite: false,
-    //   secure: true,
-    // });
-    return res.status(http2.constants.HTTP_STATUS_OK).send({ token });
+    res.status(http2.constants.HTTP_STATUS_OK).send({ token });
   } catch (err) {
     if (err.name === "ValidationError") {
       return next(new BadRequestError("Не удалось войти"));
@@ -91,6 +88,35 @@ module.exports.login = async (req, res, next) => {
     return next(err);
   }
 };
+
+// module.exports.login = (req, res, next) => {
+//   const { email, password } = req.body;
+
+//   User.findUserByCredentials((email, password))
+//     .then((user) => {
+//       if (!user) {
+//         return next(new UnauthorizedError("пользователь с таким email не найден"));
+//       }
+//       const token = jwt.sign({ _id: user._id }, "some-secret-key");
+//       return bcrypt.compare(password, user.password);
+//     })
+//     // eslint-disable-next-line consistent-return
+//     .then((matched) => {
+//       if (!matched) {
+//         // хеши не совпали — отклоняем промис
+//         return next(new UnauthorizedError("Неверный пароль"));
+//       }
+
+//       // аутентификация успешна
+//       res.send({ message: "Всё верно!" });
+//     })
+//     .catch((err) => {
+//       if (err.name === "ValidationError") {
+//         return next(new BadRequestError("Не удалось войти"));
+//       }
+//       return next(err);
+//     });
+// };
 
 // module.exports.login = async (req, res, next) => {
 //   try {
