@@ -27,6 +27,7 @@ module.exports.getUsers = async (req, res, next) => {
 
 module.exports.getUsersId = async (req, res, next) => {
   try {
+    console.log("getUsersId");
     const { usersId } = req.params;
     const userId = await User.findById(usersId).orFail(() => new NotFoundError(`${ERROR_404}`));
     res.status(http2.constants.HTTP_STATUS_OK).send(userId);
@@ -36,7 +37,7 @@ module.exports.getUsersId = async (req, res, next) => {
 };
 
 module.exports.postUser = async (req, res, next) => {
-  console.log("register start");
+  console.log("postUser");
   console.log(process.env.JWT_SECRET);
   const {
     name, about, avatar, email, password,
@@ -68,7 +69,7 @@ module.exports.login = async (req, res, next) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
-      return next(new UnauthorizedError("пользователь с таким email не найден"));
+      return next(new UnauthorizedError("Пользователь с таким email не найден"));
     }
     console.log(user);
     const matched = await bcrypt.compare(password, user.password);
@@ -77,9 +78,6 @@ module.exports.login = async (req, res, next) => {
     }
     console.log(matched);
     const token = jwt.sign({ _id: user._id }, NODE_ENV === "production" ? JWT_SECRET : "Придумать ключ");
-    if (!token) {
-      console.log("error token");
-    }
     res.status(http2.constants.HTTP_STATUS_OK).send({ token });
   } catch (err) {
     if (err.name === "ValidationError") {

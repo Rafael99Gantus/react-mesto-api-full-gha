@@ -15,26 +15,29 @@ export const validateResponse = (res) => {
       );
 };
 
-export const register = (email, password) => {
+export const register = (email, password, token) => {
   return request(`${BASE_URL}/signup`, {
     method: 'POST',
     // credentials: 'include',
     headers: {
-        "Content-Type": "application/json" 
-    },
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+  },
     body: JSON.stringify({email: email, password: password})
   }).then(validateResponse)
 }; 
 
 
-export const authorize = (email, password) => {
+export const authorize = (email, password, token) => {
   return request(`${BASE_URL}/signin`, {
     method: 'POST',
     // credentials: 'include',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+  },
     body: JSON.stringify({email, password})
   }).then(validateResponse)
 }; 

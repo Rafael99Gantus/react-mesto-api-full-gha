@@ -15,43 +15,63 @@ class Api {
             })
     }
 
-    getAllCards() {
-        return this._sendRequest(`${this._url}/cards`, {
+    getAllCards(token) {
+        return this._sendRequest(`https://api.mesto.rafael.nomoredomainsmonster.ru/cards`, {
             method: 'GET',
-            headers: this._headers
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
             // credentials: 'include',
         })
     }
 
-    createCardInServ(data) {
-        return this._sendRequest(`${this._url}/cards`, {
+    createCardInServ(data, token) {
+        return this._sendRequest(`https://api.mesto.rafael.nomoredomainsmonster.ru/cards`, {
             method: 'POST',
-            headers: this._headers,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
             // credentials: 'include',
             body: JSON.stringify(data)
         })
     }
 
-    deleteCard(id) {
-        return this._sendRequest(`${this._url}/cards/${id}`, {
+    deleteCard(id, token) {
+        return this._sendRequest(`https://api.mesto.rafael.nomoredomainsmonster.ru/cards/${id}`, {
             method: 'DELETE',
             // credentials: 'include',
-            headers: this._headers
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
         })
     }
 
-    getInfo() {
-        return this._sendRequest(`${this._url}/users/me`, {
+    getInfo(token) {
+        return this._sendRequest(`https://api.mesto.rafael.nomoredomainsmonster.ru/users/me`, {
             method: 'GET',
             // credentials: 'include',
-            headers: this._headers
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
         })
     }
 
-    saveInfoInServ(info) {
-        return this._sendRequest(`${this._url}/users/me`, {
+    saveInfoInServ(info, token) {
+        return this._sendRequest(`https://api.mesto.rafael.nomoredomainsmonster.ru/users/me`, {
             method: 'PATCH',
-            headers: this._headers,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
             // credentials: 'include',
             body: JSON.stringify({
                 name: info.name,
@@ -60,10 +80,14 @@ class Api {
         })
     }
 
-    saveAvatarInServ(info) {
-        return this._sendRequest(`${this._url}/users/me/avatar`, {
+    saveAvatarInServ(info, token) {
+        return this._sendRequest(`https://api.mesto.rafael.nomoredomainsmonster.ru/users/me/avatar`, {
             method: 'PATCH',
-            headers: this._headers,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
             // credentials: 'include',
             body: JSON.stringify({
                 avatar: info.avatar
@@ -71,14 +95,18 @@ class Api {
         })
     }
 
-    changeLikeStatus(cardId, isLiked) {
+    changeLikeStatus(cardId, isLiked, token) {
         const method = isLiked ? 'PUT' : 'DELETE';
-        const url = `${this._url}/cards/${cardId}/likes`;
+        const url = `https://api.mesto.rafael.nomoredomainsmonster.ru/cards/${cardId}/likes`;
 
         return fetch(url, {
             method: method,
             // credentials: 'include',
-            headers: this._headers,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
         })
             .then((response) => {
                 if (response.ok) {
@@ -94,8 +122,8 @@ const api = new Api({
     url: "https://api.mesto.rafael.nomoredomainsmonster.ru",
     // url: "https://localhost:3000",
     headers: {
-        authorization: '201e26a5-d782-4c58-9b61-1aee30a7887d',
-        "Content-Type": "application/json"
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
     }
 })
 
