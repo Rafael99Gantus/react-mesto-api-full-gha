@@ -158,7 +158,10 @@ module.exports.getMe = async (req, res, next) => {
     console.log("getMe");
     const userId = req.user._id;
     console.log(userId);
-    const me = await User.find({ userId }).orFail(() => new NotFoundError(`${ERROR_404}`));
+    const me = await User.findById(userId);
+    if (!me) {
+      throw new NotFoundError(`${ERROR_404}`);
+    }
     console.log(me);
     res.status(http2.constants.HTTP_STATUS_OK).json({
       name: me.name,
