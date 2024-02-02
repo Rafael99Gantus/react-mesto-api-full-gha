@@ -35,9 +35,8 @@ function App() {
   const navigate = useNavigate();
 
   function handleCardLike(card) {
-    const token = localStorage.getItem("jwt");
     const isLiked = card.likes.some(i => i._id === currentUser._id);
-    api.changeLikeStatus(card._id, !isLiked, token)
+    api.changeLikeStatus(card._id, !isLiked)
       .then((res) => {
         setCards((state) => state.map((c) => c._id === card._id ? res : c));
       })
@@ -47,8 +46,7 @@ function App() {
   }
 
   function handleCardDelete(card) {
-    const token = localStorage.getItem("jwt");
-    api.deleteCard(card._id, token)
+    api.deleteCard(card._id)
       .then((res) => {
         setCards((state) => state.filter((c) => c._id !== card._id));
       })
@@ -82,8 +80,7 @@ function App() {
   }
 
   function handleUpdateUser(info) {
-    const token = localStorage.getItem("jwt");
-    api.saveInfoInServ(info, token)
+    api.saveInfoInServ(info)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopup();
@@ -94,8 +91,7 @@ function App() {
   }
 
   function handleUpdateAvatar(avatar) {
-    const token = localStorage.getItem("jwt");
-    api.saveAvatarInServ(avatar, token)
+    api.saveAvatarInServ(avatar)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopup();
@@ -106,8 +102,7 @@ function App() {
   }
 
   function handleAddPlaceSubmit(name, link) {
-    const token = localStorage.getItem("jwt");
-    api.createCardInServ(name, link, token)
+    api.createCardInServ(name, link)
       .then((newPlace) => {
         setCards([newPlace, ...cards]);
         closeAllPopup();
@@ -171,25 +166,11 @@ function App() {
   }
 
   useEffect(() => {
-    const JWT = localStorage.getItem("jwt");
-    console.log(JWT)
-    if (JWT) {
-      Auth.checkToken(JWT)
-        .then((res) => {
-          if (res) {
-            setLoggedIn(true);
-            setUserEmail(res.email);
-          }
-        })
-        .catch(() => console.log("Ошибка в юзэффекте с проверкой токена"));
-    }
-  }, [navigate]);
-
-  useEffect(() => {
-    if (loggedIn) {
+    const token = localStorage.getItem("jwt");
+    if (token) {
       api
         .getInfo()
-        .then((res) => {
+        .then(([res]) => {
           setCurrentUser(res);
         })
         .catch((err) => {
@@ -205,6 +186,27 @@ function App() {
         });
     }
   }, [loggedIn]);
+
+  useEffect(() => {
+    // const token = localStorage.getItem("jwt");
+    const token = localStorage.getItem("userId");
+    console.log(token)
+    if (token) {
+      Auth
+        .checkToken(token)
+        .then((res) => {
+          if (res) {
+            setLoggedIn(true);
+            setUserEmail(res.email);
+          }
+        })
+        .catch((err) => {
+          // localStorage.removeItem("jwt")
+          localStorage.removeItem("userId");
+          console.log(`useEffect in frontend, checkToken: ${err}`);
+        });
+    }
+  }, [navigate]);
 
   useEffect(() => {
     if (loggedIn) navigate("/");

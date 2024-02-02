@@ -1,7 +1,7 @@
 import checkResponse from "./checkResponse";
 
-export const BASE_URL = 'https://api.mesto.rafael.nomoredomainsmonster.ru';
-// export const BASE_URL = 'https://localhost:3000';
+// export const BASE_URL = 'https://api.mesto.rafael.nomoredomainsmonster.ru';
+export const BASE_URL = 'https://localhost:3000';
 
 function request(url, options) {
   return fetch(url, options).then(checkResponse)
@@ -24,7 +24,7 @@ export const register = (email, password, token) => {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
   },
-    body: JSON.stringify({email: email, password: password})
+    body: JSON.stringify({ email, password })
   }).then(validateResponse)
 }; 
 
@@ -38,8 +38,14 @@ export const authorize = (email, password, token) => {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
   },
-    body: JSON.stringify({email, password})
-  }).then(validateResponse)
+    body: JSON.stringify({ email, password })
+  })
+  .then(validateResponse)
+  .then((data) =>{
+    localStorage.setItem('jwt', data.token)
+    // localStorage.setItem('userId', data._id)
+    return data;
+  })
 }; 
 
 export const checkToken = (token) => {
@@ -49,7 +55,7 @@ export const checkToken = (token) => {
       headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Authorization': token
       }
   })
 };

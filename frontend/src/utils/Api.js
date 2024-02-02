@@ -15,20 +15,22 @@ class Api {
             })
     }
 
-    getAllCards(token) {
-        return this._sendRequest(`https://api.mesto.rafael.nomoredomainsmonster.ru/cards`, {
+    getAllCards() {
+        const token = localStorage.getItem("jwt");
+        return this._sendRequest(`${this._url}/cards`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
-            }
-            // credentials: 'include',
+            },
+            // credentials: 'include'
         })
     }
 
-    createCardInServ(data, token) {
-        return this._sendRequest(`https://api.mesto.rafael.nomoredomainsmonster.ru/cards`, {
+    createCardInServ(data) {
+        const token = localStorage.getItem("jwt");
+        return this._sendRequest(`${this._url}/cards`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -40,10 +42,11 @@ class Api {
         })
     }
 
-    deleteCard(id, token) {
-        return this._sendRequest(`https://api.mesto.rafael.nomoredomainsmonster.ru/cards/${id}`, {
+    deleteCard(id) {
+        const token = localStorage.getItem("jwt");
+        return this._sendRequest(`${this._url}/cards/${id}`, {
             method: 'DELETE',
-            // credentials: 'include',
+            credentials: 'include',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -52,8 +55,9 @@ class Api {
         })
     }
 
-    getInfo(token) {
-        return this._sendRequest(`https://api.mesto.rafael.nomoredomainsmonster.ru/users/me`, {
+    getInfo() {
+        const token = localStorage.getItem("jwt");
+        return this._sendRequest(`${this._url}/users/me`, {
             method: 'GET',
             // credentials: 'include',
             headers: {
@@ -64,8 +68,9 @@ class Api {
         })
     }
 
-    saveInfoInServ(info, token) {
-        return this._sendRequest(`https://api.mesto.rafael.nomoredomainsmonster.ru/users/me`, {
+    saveInfoInServ(info) {
+        const token = localStorage.getItem("jwt");
+        return this._sendRequest(`${this._url}/users/me`, {
             method: 'PATCH',
             headers: {
                 'Accept': 'application/json',
@@ -80,8 +85,9 @@ class Api {
         })
     }
 
-    saveAvatarInServ(info, token) {
-        return this._sendRequest(`https://api.mesto.rafael.nomoredomainsmonster.ru/users/me/avatar`, {
+    saveAvatarInServ(info) {
+        const token = localStorage.getItem("jwt");
+        return this._sendRequest(`${this._url}/users/me/avatar`, {
             method: 'PATCH',
             headers: {
                 'Accept': 'application/json',
@@ -95,9 +101,10 @@ class Api {
         })
     }
 
-    changeLikeStatus(cardId, isLiked, token) {
+    changeLikeStatus(cardId, isLiked) {
+        const token = localStorage.getItem("jwt");
         const method = isLiked ? 'PUT' : 'DELETE';
-        const url = `https://api.mesto.rafael.nomoredomainsmonster.ru/cards/${cardId}/likes`;
+        const url = `${this._url}/cards/${cardId}/likes`;
 
         return fetch(url, {
             method: method,
@@ -119,8 +126,8 @@ class Api {
 }
 
 const api = new Api({
-    url: "https://api.mesto.rafael.nomoredomainsmonster.ru",
-    // url: "https://localhost:3000",
+    // url: "https://api.mesto.rafael.nomoredomainsmonster.ru",
+    url: "https://localhost:3000",
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'

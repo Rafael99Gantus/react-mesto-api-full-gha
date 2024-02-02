@@ -65,18 +65,15 @@ module.exports.postUser = async (req, res, next) => {
 // eslint-disable-next-line consistent-return
 module.exports.login = async (req, res, next) => {
   try {
-    console.log("login start");
     const { email, password } = req.body;
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
       return next(new UnauthorizedError("Пользователь с таким email не найден"));
     }
-    console.log(user);
     const matched = await bcrypt.compare(password, user.password);
     if (!matched) {
       return next(new UnauthorizedError("Неверный пароль"));
     }
-    console.log(matched);
     const token = jwt.sign({ _id: user._id }, NODE_ENV === "production" ? JWT_SECRET : "Придумать ключ");
     res.status(http2.constants.HTTP_STATUS_OK).send({ token });
   } catch (err) {
@@ -135,13 +132,7 @@ module.exports.login = async (req, res, next) => {
 //       sameSite: true,
 //       secure: false,
 //     });
-//     return res.send({
-//       email: foundUser.email,
-//       about: foundUser.about,
-//       name: foundUser.email,
-//       avatar: foundUser.avatar,
-//       _id: foundUser._id,
-//     });
+//     return res.send(foundUser.toJSON());
 //   } catch (err) {
 //     if (err.name === "ValidationError") {
 //       return next(new BadRequestError("Не удалось войти"));

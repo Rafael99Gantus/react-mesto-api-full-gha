@@ -35,7 +35,7 @@ module.exports = (req, res, next) => {
 //     const { cookies } = req;
 //     if ((cookies && cookies.jwt)) {
 //       const token = cookies.jwt;
-//       payload = jwt.verify(token, NODE_ENV === "production" ? JWT_SECRET_PRODUCTION : "dev-secret");
+//       payload = jwt.verify(token, NODE_ENV === "production" ? JWT_SECRET : "Придумать ключ");
 //       req.user = payload;
 //       next();
 //     } else {
