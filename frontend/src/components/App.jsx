@@ -34,47 +34,84 @@ function App() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (loggedIn) {
-      api
-        .getInfo()
-        .then((res) => {
-          setCurrentUser(res);
-        })
-        .catch((err) => {
-          console.log(`Ошибка входа пользователя: ${err}`);
-        });
-      api
-        .getCards()
-        .then((res) => {
-          setCards(res);
-        })
-        .catch((err) => {
-          console.log(`Ошибка загрузки карточек пользователя: ${err}`);
-        });
-    }
-  }, [loggedIn]);
+  // useEffect(() => {
+  //   if (loggedIn) {
+  //     api
+  //       .getInfo()
+  //       .then((res) => {
+  //         setCurrentUser(res);
+  //       })
+  //       .catch((err) => {
+  //         console.log(`Ошибка входа пользователя: ${err}`);
+  //       });
+  //     api
+  //       .getCards()
+  //       .then((res) => {
+  //         setCards(res);
+  //       })
+  //       .catch((err) => {
+  //         console.log(`Ошибка загрузки карточек пользователя: ${err}`);
+  //       });
+  //   }
+  // }, [loggedIn]);
+
+  // useEffect(() => {
+  //   // const token = localStorage.getItem("jwt");
+  //   const token = localStorage.getItem("jwt");
+  //   console.log(token)
+  //   if (token) {
+  //     Auth
+  //       .checkToken(token)
+  //       .then((res) => {
+  //         if (res) {
+  //           setLoggedIn(true);
+  //           setUserEmail(res.email);
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         // localStorage.removeItem("jwt")
+  //         localStorage.removeItem("jwt");
+  //         console.log(`useEffect in frontend, checkToken: ${err}`);
+  //       });
+  //   }
+  // }, [navigate]);
+
+  // useEffect(() => {
+  //   if (loggedIn) navigate("/");
+  // }, [loggedIn, navigate]);
 
   useEffect(() => {
-    // const token = localStorage.getItem("jwt");
-    const token = localStorage.getItem("jwt");
-    console.log(token)
-    if (token) {
-      Auth
-        .checkToken(token)
+    api.getInfo()
+      .then((res) => {
+        setCurrentUser(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    api.getAllCards()
+      .then((res) => {
+        setCards(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    const JWT = localStorage.getItem("jwt");
+    if (JWT) {
+      Auth.checkToken(JWT)
         .then((res) => {
           if (res) {
             setLoggedIn(true);
-            setUserEmail(res.email);
+            setUserEmail(res.data.email);
+            navigate("/", {replace: true})
           }
         })
-        .catch((err) => {
-          // localStorage.removeItem("jwt")
-          localStorage.removeItem("jwt");
-          console.log(`useEffect in frontend, checkToken: ${err}`);
-        });
+        .catch((err) => console.log(err));
     }
-  }, [navigate]);
+  }, []);
 
   useEffect(() => {
     if (loggedIn) navigate("/");
@@ -178,33 +215,41 @@ function App() {
   //     });
   // };
 
-  const handleLogin = async (email, password) => {
-    try {
-      const data = await Auth.authorize(email, password);
-      if (data.token) {
-        localStorage.setItem("jwt", data.token);
-        setLoggedIn(true);
-        setUserEmail(email);
-        localStorage.setItem("loggedIn", true);
-        navigate("/");
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // const handleLogin = async (email, password) => {
+  //   try {
+  //     const data = await Auth.authorize(email, password);
+  //     if (data.token) {
+  //       localStorage.setItem("jwt", data.token);
+  //       setLoggedIn(true);
+  //       setUserEmail(email);
+  //       localStorage.setItem("loggedIn", true);
+  //       navigate("/");
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
-  const handleRegister = (email, password) => {
-    Auth
-      .register(email, password)
-      .then(() => {
-        setLoggedIn(true);
-      })
-      .catch((err) => {
-        setLoggedIn(false);
-        setIsInfoTooltipPopup(true);
-        console.log(`Ошибка при регистрации: ${err}`);
-      });
-  };
+  // const handleRegister = (email, password) => {
+  //   Auth
+  //     .register(email, password)
+  //     .then(() => {
+  //       setLoggedIn(true);
+  //     })
+  //     .catch((err) => {
+  //       setLoggedIn(false);
+  //       setIsInfoTooltipPopup(true);
+  //       console.log(`Ошибка при регистрации: ${err}`);
+  //     });
+  // };
+
+  function handleRegister() {
+
+  }
+
+  const handleLogin = () => {
+    setLoggedIn(true);
+  }
 
   function handleIsInfoTooltipClick() {
     setIsInfoTooltipPopup(true)
