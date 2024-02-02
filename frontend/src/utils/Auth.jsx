@@ -1,7 +1,7 @@
 import checkResponse from "./checkResponse";
 
-// export const BASE_URL = 'https://api.mesto.rafael.nomoredomainsmonster.ru';
-export const BASE_URL = 'https://localhost:3000';
+export const BASE_URL = 'https://api.mesto.rafael.nomoredomainsmonster.ru';
+// export const BASE_URL = 'https://localhost:3000';
 
 function request(url, options) {
   return fetch(url, options).then(checkResponse)
@@ -15,14 +15,16 @@ export const validateResponse = (res) => {
       );
 };
 
-export const register = (email, password, token) => {
+export const register = (email, password) => {
+  const token = localStorage.getItem("jwt");
+  console.log(token)
   return request(`${BASE_URL}/signup`, {
     method: 'POST',
     // credentials: 'include',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      'Authorization': token
   },
     body: JSON.stringify({ email, password })
   }).then(validateResponse)
@@ -30,22 +32,18 @@ export const register = (email, password, token) => {
 
 
 export const authorize = (email, password, token) => {
+  
   return request(`${BASE_URL}/signin`, {
     method: 'POST',
     // credentials: 'include',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      'Authorization': token
   },
     body: JSON.stringify({ email, password })
   })
   .then(validateResponse)
-  .then((data) =>{
-    localStorage.setItem('jwt', data.token)
-    // localStorage.setItem('userId', data._id)
-    return data;
-  })
 }; 
 
 export const checkToken = (token) => {

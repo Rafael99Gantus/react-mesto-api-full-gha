@@ -22,7 +22,7 @@ class Api {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': token
             },
             // credentials: 'include'
         })
@@ -35,7 +35,7 @@ class Api {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': token
             },
             // credentials: 'include',
             body: JSON.stringify(data)
@@ -50,7 +50,7 @@ class Api {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': token
             }
         })
     }
@@ -63,7 +63,7 @@ class Api {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': token
             }
         })
     }
@@ -75,7 +75,7 @@ class Api {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': token
             },
             // credentials: 'include',
             body: JSON.stringify({
@@ -92,7 +92,7 @@ class Api {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': token
             },
             // credentials: 'include',
             body: JSON.stringify({
@@ -112,7 +112,7 @@ class Api {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': token
             }
         })
             .then((response) => {
@@ -126,8 +126,8 @@ class Api {
 }
 
 const api = new Api({
-    // url: "https://api.mesto.rafael.nomoredomainsmonster.ru",
-    url: "https://localhost:3000",
+    url: "https://api.mesto.rafael.nomoredomainsmonster.ru",
+    // url: "https://localhost:3000",
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'

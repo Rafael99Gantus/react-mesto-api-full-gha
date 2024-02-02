@@ -30,9 +30,55 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false)
   const [userEmail, setUserEmail] = useState("");
 
-  const TOKEN_KEY = 'token';
+  // const TOKEN_KEY = 'token';
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (loggedIn) {
+      api
+        .getInfo()
+        .then((res) => {
+          setCurrentUser(res);
+        })
+        .catch((err) => {
+          console.log(`Ошибка входа пользователя: ${err}`);
+        });
+      api
+        .getCards()
+        .then((res) => {
+          setCards(res);
+        })
+        .catch((err) => {
+          console.log(`Ошибка загрузки карточек пользователя: ${err}`);
+        });
+    }
+  }, [loggedIn]);
+
+  useEffect(() => {
+    // const token = localStorage.getItem("jwt");
+    const token = localStorage.getItem("jwt");
+    console.log(token)
+    if (token) {
+      Auth
+        .checkToken(token)
+        .then((res) => {
+          if (res) {
+            setLoggedIn(true);
+            setUserEmail(res.email);
+          }
+        })
+        .catch((err) => {
+          // localStorage.removeItem("jwt")
+          localStorage.removeItem("jwt");
+          console.log(`useEffect in frontend, checkToken: ${err}`);
+        });
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    if (loggedIn) navigate("/");
+  }, [loggedIn, navigate]);
 
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -116,25 +162,40 @@ function App() {
 
   // }
 
-  const handleLogin = (email, password) => {
-    const token = localStorage.getItem("jwt");
-    Auth.authorize(email, password, token)
-      .then((data) => {
-        console.log(data)
-        if (data.token) {
-          localStorage.setItem(TOKEN_KEY, data.token);
-          setLoggedIn(true);
-        }
-      })
-      .catch((err) => {
-        console.log(`Ошибка авторизации: ${err}`);
-      });
+  // const handleLogin = (email, password) => {
+  //   const token = localStorage.getItem("jwt");
+  //   console.log(token)
+  //   Auth.authorize(email, password, token)
+  //     .then((data) => {
+  //       console.log(data)
+  //       if (data.token) {
+  //         localStorage.setItem("jwt", data.token);
+  //         setLoggedIn(true);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(`Ошибка авторизации: ${err}`);
+  //     });
+  // };
+
+  const handleLogin = async (email, password) => {
+    try {
+      const data = await Auth.authorize(email, password);
+      if (data.token) {
+        localStorage.setItem("jwt", data.token);
+        setLoggedIn(true);
+        setUserEmail(email);
+        localStorage.setItem("loggedIn", true);
+        navigate("/");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleRegister = (email, password) => {
-    const token = localStorage.getItem("jwt");
     Auth
-      .register(email, password, token)
+      .register(email, password)
       .then(() => {
         setLoggedIn(true);
       })
@@ -145,72 +206,9 @@ function App() {
       });
   };
 
-  // const handleLogin = (email, password) => {
-  //   Auth
-  //     .authorize(email, password)
-  //     .then((res) => {
-  //       if (res.statusCode === 401) throw new Error("Ошибка авторизации");
-  //       if (res) {
-  //         localStorage.setItem("jwt", res.token);
-  //         setLoggedIn(true);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(`Ошибка авторизации: ${err}`);
-  //       setLoggedIn(false);
-  //     });
-  // };
-
   function handleIsInfoTooltipClick() {
     setIsInfoTooltipPopup(true)
   }
-
-  useEffect(() => {
-    const token = localStorage.getItem("jwt");
-    if (token) {
-      api
-        .getInfo()
-        .then(([res]) => {
-          setCurrentUser(res);
-        })
-        .catch((err) => {
-          console.log(`Ошибка входа пользователя: ${err}`);
-        });
-      api
-        .getCards()
-        .then((res) => {
-          setCards(res);
-        })
-        .catch((err) => {
-          console.log(`Ошибка загрузки карточек пользователя: ${err}`);
-        });
-    }
-  }, [loggedIn]);
-
-  useEffect(() => {
-    // const token = localStorage.getItem("jwt");
-    const token = localStorage.getItem("userId");
-    console.log(token)
-    if (token) {
-      Auth
-        .checkToken(token)
-        .then((res) => {
-          if (res) {
-            setLoggedIn(true);
-            setUserEmail(res.email);
-          }
-        })
-        .catch((err) => {
-          // localStorage.removeItem("jwt")
-          localStorage.removeItem("userId");
-          console.log(`useEffect in frontend, checkToken: ${err}`);
-        });
-    }
-  }, [navigate]);
-
-  useEffect(() => {
-    if (loggedIn) navigate("/");
-  }, [loggedIn, navigate]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
