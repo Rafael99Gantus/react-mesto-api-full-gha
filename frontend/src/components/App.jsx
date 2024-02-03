@@ -111,7 +111,7 @@ function App() {
         })
         .catch((err) => console.log(err));
     }
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     if (loggedIn) navigate("/");
