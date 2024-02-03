@@ -80,23 +80,23 @@ function App() {
   //   if (loggedIn) navigate("/");
   // }, [loggedIn, navigate]);
 
-  useEffect(() => {
-    api.getInfo()
-      .then((res) => {
-        setCurrentUser(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  // useEffect(() => {
+  //   api.getInfo()
+  //     .then((res) => {
+  //       setCurrentUser(res);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
 
-    api.getAllCards()
-      .then((res) => {
-        setCards(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  //   api.getAllCards()
+  //     .then((res) => {
+  //       setCards(res);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
 
   useEffect(() => {
     const JWT = localStorage.getItem("jwt");
@@ -110,6 +110,21 @@ function App() {
           }
         })
         .catch((err) => console.log(err));
+        api.getInfo()
+        .then((res) => {
+          setCurrentUser(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  
+      api.getAllCards()
+        .then((res) => {
+          setCards(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, [navigate]);
 
