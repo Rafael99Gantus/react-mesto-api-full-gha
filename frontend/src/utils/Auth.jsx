@@ -1,7 +1,7 @@
 import checkResponse from "./checkResponse";
 
-// export const BASE_URL = 'https://api.mesto.rafael.nomoredomainsmonster.ru';
-export const BASE_URL = 'https://localhost:3000';
+export const BASE_URL = 'https://api.mesto.rafael.nomoredomainsmonster.ru';
+// export const BASE_URL = 'https://localhost:3000';
 
 // function request(url, options) {
 //   return fetch(url, options).then(checkResponse)

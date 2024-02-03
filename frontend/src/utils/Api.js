@@ -126,8 +126,8 @@ class Api {
 }
 
 const api = new Api({
-    // url: "https://api.mesto.rafael.nomoredomainsmonster.ru",
-    url: "https://localhost:3000",
+    url: "https://api.mesto.rafael.nomoredomainsmonster.ru",
+    // url: "https://localhost:3000",
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
