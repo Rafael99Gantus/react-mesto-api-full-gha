@@ -21,7 +21,7 @@ export default function Card(props) {
 
 	return (
 		<article id='elements__element' className="elements__element">
-			{isOwn && <button id="trash" type="button" className='elements__trash' onClick={handleDeleteCard} />}
+			{isOwn && (<button id="trash" type="button" className='elements__trash' onClick={handleDeleteCard} />)}
 			{/* {props.onAnswer} Будет использоваться для открытия попапа Answer*/}
 			<div className="elements__box">
 				<img className="elements__image" src={props.link} alt={props.name} onClick={handleClick} />
