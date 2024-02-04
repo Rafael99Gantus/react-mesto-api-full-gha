@@ -84,63 +84,6 @@ module.exports.login = async (req, res, next) => {
   }
 };
 
-// module.exports.login = (req, res, next) => {
-//   const { email, password } = req.body;
-
-//   User.findUserByCredentials((email, password))
-//     .then((user) => {
-//       if (!user) {
-//         return next(new UnauthorizedError("пользователь с таким email не найден"));
-//       }
-//       const token = jwt.sign({ _id: user._id }, "some-secret-key");
-//       return bcrypt.compare(password, user.password);
-//     })
-//     // eslint-disable-next-line consistent-return
-//     .then((matched) => {
-//       if (!matched) {
-//         // хеши не совпали — отклоняем промис
-//         return next(new UnauthorizedError("Неверный пароль"));
-//       }
-
-//       // аутентификация успешна
-//       res.send({ message: "Всё верно!" });
-//     })
-//     .catch((err) => {
-//       if (err.name === "ValidationError") {
-//         return next(new BadRequestError("Не удалось войти"));
-//       }
-//       return next(err);
-//     });
-// };
-
-// module.exports.login = async (req, res, next) => {
-//   try {
-//     const { email, password } = req.body;
-
-//     const foundUser = await User.findOne({ email }).select("+password");
-//     if (!foundUser) {
-//       return next(new UnauthorizedError("пользователь с таким email не найден"));
-//     }
-//     const compareResult = await bcrypt.compare(password, foundUser.password);
-//     if (!compareResult) {
-//       return next(new UnauthorizedError("Неверный пароль"));
-//     }
-//     const token = jwt.sign({ _id: foundUser._id }, NODE_ENV === "production" ? JWT_SECRET : "Придумать ключ");
-//     res.cookie("jwt", token, {
-//       maxAge: 3600000 * 24 * 7,
-//       httpOnly: true,
-//       sameSite: true,
-//       secure: false,
-//     });
-//     return res.send(foundUser.toJSON());
-//   } catch (err) {
-//     if (err.name === "ValidationError") {
-//       return next(new BadRequestError("Не удалось войти"));
-//     }
-//     return next(err);
-//   }
-// };
-
 module.exports.getMe = async (req, res, next) => {
   try {
     if (!req.user || !req.user._id) {

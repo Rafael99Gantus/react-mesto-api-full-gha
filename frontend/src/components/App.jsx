@@ -30,73 +30,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false)
   const [userEmail, setUserEmail] = useState("");
 
-  // const TOKEN_KEY = 'token';
-
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   if (loggedIn) {
-  //     api
-  //       .getInfo()
-  //       .then((res) => {
-  //         setCurrentUser(res);
-  //       })
-  //       .catch((err) => {
-  //         console.log(`Ошибка входа пользователя: ${err}`);
-  //       });
-  //     api
-  //       .getCards()
-  //       .then((res) => {
-  //         setCards(res);
-  //       })
-  //       .catch((err) => {
-  //         console.log(`Ошибка загрузки карточек пользователя: ${err}`);
-  //       });
-  //   }
-  // }, [loggedIn]);
-
-  // useEffect(() => {
-  //   // const token = localStorage.getItem("jwt");
-  //   const token = localStorage.getItem("jwt");
-  //   console.log(token)
-  //   if (token) {
-  //     Auth
-  //       .checkToken(token)
-  //       .then((res) => {
-  //         if (res) {
-  //           setLoggedIn(true);
-  //           setUserEmail(res.email);
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         // localStorage.removeItem("jwt")
-  //         localStorage.removeItem("jwt");
-  //         console.log(`useEffect in frontend, checkToken: ${err}`);
-  //       });
-  //   }
-  // }, [navigate]);
-
-  // useEffect(() => {
-  //   if (loggedIn) navigate("/");
-  // }, [loggedIn, navigate]);
-
-  // useEffect(() => {
-  //   api.getInfo()
-  //     .then((res) => {
-  //       setCurrentUser(res);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-
-  //   api.getAllCards()
-  //     .then((res) => {
-  //       setCards(res);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, []);
 
   useEffect(() => {
     const JWT = localStorage.getItem("jwt");
