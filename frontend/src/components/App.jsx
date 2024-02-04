@@ -210,54 +210,6 @@ function App() {
       });
   }
 
-  // function handleRegister() {
-
-  // }
-
-  // const handleLogin = (email, password) => {
-  //   const token = localStorage.getItem("jwt");
-  //   console.log(token)
-  //   Auth.authorize(email, password, token)
-  //     .then((data) => {
-  //       console.log(data)
-  //       if (data.token) {
-  //         localStorage.setItem("jwt", data.token);
-  //         setLoggedIn(true);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(`Ошибка авторизации: ${err}`);
-  //     });
-  // };
-
-  // const handleLogin = async (email, password) => {
-  //   try {
-  //     const data = await Auth.authorize(email, password);
-  //     if (data.token) {
-  //       localStorage.setItem("jwt", data.token);
-  //       setLoggedIn(true);
-  //       setUserEmail(email);
-  //       localStorage.setItem("loggedIn", true);
-  //       navigate("/");
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
-  // const handleRegister = (email, password) => {
-  //   Auth
-  //     .register(email, password)
-  //     .then(() => {
-  //       setLoggedIn(true);
-  //     })
-  //     .catch((err) => {
-  //       setLoggedIn(false);
-  //       setIsInfoTooltipPopup(true);
-  //       console.log(`Ошибка при регистрации: ${err}`);
-  //     });
-  // };
-
   function handleRegister() {
 
   }
