@@ -41,6 +41,7 @@ module.exports.postCard = async (req, res, next) => {
   try {
     console.log("postCard");
     const owner = req.user._id;
+    console.log(owner);
     const { name, link } = req.body;
     const newCard = await Card.create({ name, link, owner });
     res.status(http2.constants.HTTP_STATUS_OK).send(newCard);
