@@ -46,7 +46,7 @@ class Api {
         const token = localStorage.getItem("jwt");
         return this._sendRequest(`${this._url}/cards/${id}`, {
             method: 'DELETE',
-            credentials: 'include',
+            // credentials: 'include',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
